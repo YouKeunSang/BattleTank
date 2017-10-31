@@ -126,11 +126,11 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 #region 외부와의 인터페이스
     public virtual void NormalClick(float x,float y)
     {
-        Debug.Log("NormalClick " + x + "," + y);
+        //Debug.Log("NormalClick " + x + "," + y);
     }
     public virtual void SkillClick(float x, float y)
     {
-        Debug.Log("SkillClick " + x + "," + y);
+        //Debug.Log("SkillClick " + x + "," + y);
     }
 #endregion
 }

@@ -83,6 +83,16 @@ public class Tank : MonoBehaviour {
             _movingSpeed = skillSpeed;
         }
         _dir.Normalize();
+        //몸체가 회전할 각도를 계산한다.
+        gameObject.transform.eulerAngles = new Vector3(0, GetAngle(_dir), 0);
         _isMove = true;
+    }
+
+    public static float GetAngle(Vector3 direction)
+    {
+        //1. 각도계산
+        float _deg = Vector3.Angle(Vector3.forward, direction);
+        _deg = direction.x < 0 ? 360 - _deg : _deg;
+        return _deg;
     }
 }
