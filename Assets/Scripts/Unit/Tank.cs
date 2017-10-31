@@ -16,6 +16,7 @@ public enum TANK_STATE
  * TODO: 입력된 좌표로 이동하면서 장애물을 건너뛰는 path finding에 대한 서비스도 나중에 여기서 구현한다
  */
 public class Tank : MonoBehaviour {
+    public int HP = 300;
     public float speed = 3.0f;  //이동속도
     public float skillSpeed = 5.0f; //스킬이동속도
     public GameObject turret;   //포탑
@@ -23,16 +24,65 @@ public class Tank : MonoBehaviour {
     public BaseBullet skillBullet;
 
     Tank enemy; //현재 지정된 적
+    //이동에 관련된 변수들
+    Vector3 _dir;   //지정되 좌표로의 방향
+    float _timeToDest = 0f; //좌표까지 가는데 걸리는 시간
+    bool _isMove = false;
+    float _movingSpeed = 0;
 
 	// Use this for initialization
 	void Start () {
-		
+		if(tag.Equals("Player"))
+        {
+            BattleMgr.instance.SetPlayer(this);
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if(_isMove)
+        {
+            gameObject.transform.position += _dir * Time.deltaTime * _movingSpeed;
+            _timeToDest -= Time.deltaTime;
+            if(0 >= _timeToDest)
+            {
+                _isMove = false;
+            }
+        }
 	}
-    
 
+    public void SetColor(Color color)
+    {
+
+    }
+    public void Attack(Vector2 dest,bool isSkill)
+    {
+
+    }
+    /// <summary>
+    /// 화면에서 지정된 좌료로 이동한다.
+    /// 여기서는 그 방향으로 벡터 방향과 거리,시간이 계산된다
+    /// </summary>
+    /// <param name="dest">화면상 좌표, 실제 거리로 변경하여 이동한다.</param>
+    /// <param name="isSkill"></param>
+    public void Move(Vector2 dest,bool isSkill)
+    {
+        Camera _c = BattleMgr.instance.GetCamera();
+        Vector3 _dest = _c.ScreenToWorldPoint(dest);
+        _dest.y = 0;
+
+        _dir = _dest - gameObject.transform.position;
+        if(!isSkill)
+        {
+            _timeToDest = _dir.magnitude / speed;
+            _movingSpeed = speed;
+        }
+        else
+        {
+            _timeToDest = _dir.magnitude / skillSpeed;
+            _movingSpeed = skillSpeed;
+        }
+        _dir.Normalize();
+        _isMove = true;
+    }
 }

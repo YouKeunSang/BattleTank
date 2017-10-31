@@ -78,6 +78,8 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     {
         if(isStart)
         {
+            _cntDown = 0;
+            _cntUP = 0;
             _elaspedTime = 0;
             _isProcess = true;
         }
@@ -96,7 +98,6 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         {
             SetClickState(true);
             _touchID = eventData.pointerId==-1 ? 100 : eventData.pointerId;
-            Debug.Log("touch id = " + _touchID);
         }
         else
         {
