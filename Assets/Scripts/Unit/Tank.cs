@@ -82,12 +82,12 @@ public class Tank : MonoBehaviour {
             _bullet = Instantiate(skillBullet) as GameObject;
         }
         _bullet.transform.SetParent(firePosition);
-        _bullet.transform.rotation = Quaternion.identity;
+        _bullet.transform.rotation = turret.transform.rotation;
         _bullet.transform.localScale = Vector3.one;
         _bullet.transform.localPosition = Vector3.zero;
 
         _baseBullet = _bullet.GetComponent<BaseBullet>();
-        _baseBullet.Fire(new Vector2(_dest.x, _dest.z));
+        _baseBullet.Fire(_dest);
 
     }
     /// <summary>
