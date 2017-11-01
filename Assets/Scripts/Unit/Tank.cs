@@ -20,8 +20,9 @@ public class Tank : MonoBehaviour {
     public float speed = 3.0f;  //이동속도
     public float skillSpeed = 5.0f; //스킬이동속도
     public GameObject turret;   //포탑
-    public BaseBullet normalBullet;
-    public BaseBullet skillBullet;
+    public Transform firePosition;  
+    public GameObject normalBullet;
+    public GameObject skillBullet;
 
     Tank enemy; //현재 지정된 적
     //이동에 관련된 변수들
@@ -55,8 +56,38 @@ public class Tank : MonoBehaviour {
     {
 
     }
+    /// <summary>
+    /// 포탑을 이동후 탄을 생성해서 발사한다.
+    /// </summary>
+    /// <param name="dest"></param>
+    /// <param name="isSkill"></param>
     public void Attack(Vector2 dest,bool isSkill)
     {
+        Camera _c = BattleMgr.instance.GetCamera();
+        Vector3 _dest = _c.ScreenToWorldPoint(dest);
+        Vector3 _direction = _dest - gameObject.transform.position;
+        GameObject _bullet;
+        BaseBullet _baseBullet;
+
+        //1. 포탑을 지정되 곳으로 회전시킨다.
+        turret.transform.eulerAngles = new Vector3(0, GetAngle(_dest), 0);
+
+        //2. 탄을 생성한다.
+        if(!isSkill)
+        {
+            _bullet = Instantiate(normalBullet) as GameObject;
+        }
+        else
+        {
+            _bullet = Instantiate(skillBullet) as GameObject;
+        }
+        _bullet.transform.SetParent(firePosition);
+        _bullet.transform.rotation = Quaternion.identity;
+        _bullet.transform.localScale = Vector3.one;
+        _bullet.transform.localPosition = Vector3.zero;
+
+        _baseBullet = _bullet.GetComponent<BaseBullet>();
+        _baseBullet.Fire(new Vector2(_dest.x, _dest.z));
 
     }
     /// <summary>
