@@ -70,7 +70,7 @@ public class Tank : MonoBehaviour {
         BaseBullet _baseBullet;
 
         //1. 포탑을 지정되 곳으로 회전시킨다.
-        turret.transform.eulerAngles = new Vector3(0, GetAngle(_dest), 0);
+        turret.transform.eulerAngles = new Vector3(0, GetAngle(_direction), 0);
 
         //2. 탄을 생성한다.
         if(!isSkill)
@@ -81,10 +81,9 @@ public class Tank : MonoBehaviour {
         {
             _bullet = Instantiate(skillBullet) as GameObject;
         }
-        _bullet.transform.SetParent(firePosition);
         _bullet.transform.rotation = turret.transform.rotation;
         _bullet.transform.localScale = Vector3.one;
-        _bullet.transform.localPosition = Vector3.zero;
+        _bullet.transform.position = firePosition.position;
 
         _baseBullet = _bullet.GetComponent<BaseBullet>();
         _baseBullet.Fire(_dest);
