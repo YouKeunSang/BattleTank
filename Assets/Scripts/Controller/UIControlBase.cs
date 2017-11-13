@@ -19,6 +19,7 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     int _cntDown = 0;   //터치가 내려간 카운트
     int _cntUP = 0;     //터치가 올라간 카운트
     float _elaspedTime = 0;
+    Vector2 _firstTouch;
 
     // Use this for initialization
     void Start () {
@@ -37,7 +38,7 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
                 if (2.0f < _t.pressure)
                 {
                     SetClickState(false);
-                    SkillClick(_t.position.x,_t.position.y);
+                    SkillClick(_firstTouch.x, _firstTouch.y);
                 }
             }
         }
@@ -46,26 +47,16 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         if(doubleClickThreshold < _elaspedTime)
         {
             _isProcess = false;
-            Vector2 _position;
-
-            if(100 == _touchID)
-            {
-                _position = Input.mousePosition;
-            }
-            else
-            {
-                _position = GetTouchByID(_touchID).position;
-            }
-
+ 
             if(0 == _cntUP)
             {
                 //지정시간동안 누르고 있는 경우
-                SkillClick(_position.x,_position.y);
+                SkillClick(_firstTouch.x, _firstTouch.y);
             }
             else
             {
                 //일반 공격의 경우
-                NormalClick(_position.x, _position.y);
+                NormalClick(_firstTouch.x, _firstTouch.y);
             }
             SetClickState(false);
         }
@@ -97,13 +88,14 @@ public class UIControlBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         if(!_isProcess)
         {
             SetClickState(true);
+            _firstTouch = eventData.position;
             _touchID = eventData.pointerId==-1 ? 100 : eventData.pointerId;
         }
         else
         {
             //한번 눌리고 다시 일정시간안데 다시 눌렸다면 더블클릭임을 확신할수 있음으로 스킬이다.
             SetClickState(false);
-            SkillClick(eventData.position.x, eventData.position.y);
+            SkillClick(_firstTouch.x, _firstTouch.y);
         }
         _cntDown++;
     }
