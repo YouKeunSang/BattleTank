@@ -6,6 +6,7 @@ public class BaseBullet : MonoBehaviour {
     public float speed = 15f;
     public float damage = 100f;
     public float radious = 10;  //폭팔범위
+    public GameObject explosion;
     Vector3 _dir;
     float _timeToTarget = 0;
     bool _isMove = false;
@@ -45,6 +46,17 @@ public class BaseBullet : MonoBehaviour {
     /// </summary>
     void Expire()
     {
+        if(null != explosion)
+        {
+            GameObject _obj = Instantiate(explosion) as GameObject;
+            _obj.transform.position = transform.position;
+            _obj.transform.localScale = new Vector3(radious,radious,radious);
+            ParticleSystem[] _ps = _obj.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem p in _ps)
+            {
+                p.Play();
+            }
+        }
         Destroy(gameObject);
     }
 }
