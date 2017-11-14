@@ -34,6 +34,7 @@ public class BaseBullet : MonoBehaviour {
     /// <param name="dest">여기서 좌표는 screen좌표가 아니고 계산된 world의 좌표임</param>
     public void Fire(Vector3 dest)
     {
+        dest.y = gameObject.transform.position.y;
         _dir = dest - gameObject.transform.position;
         _timeToTarget = _dir.magnitude / speed;
         _dir.Normalize();
