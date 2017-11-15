@@ -55,8 +55,10 @@ public class BaseBullet : MonoBehaviour {
             foreach (ParticleSystem p in _ps)
             {
                 p.Play();
+                
             }
         }
         Destroy(gameObject);
+
     }
 }
